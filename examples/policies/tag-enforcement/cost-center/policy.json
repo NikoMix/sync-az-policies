@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "displayName": "Require CostCenter Tag",
+    "description": "Require the CostCenter tag on resources.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "Tags"
+    },
+    "policyRule": {
+      "if": {
+        "field": "tags['CostCenter']",
+        "exists": "false"
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

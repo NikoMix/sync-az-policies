@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "displayName": "Sample Baseline Initiative",
+    "description": "Groups sample policy definitions for baseline governance.",
+    "metadata": {
+      "category": "General"
+    },
+    "parameters": {},
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "allowed-locations",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/allowed-locations"
+      },
+      {
+        "policyDefinitionReferenceId": "require-cost-center",
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/require-costcenter-tag"
+      }
+    ]
+  }
+}

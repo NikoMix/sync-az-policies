@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "displayName": "Allowed Locations",
+    "description": "Only allow resources to be deployed in approved regions.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "General"
+    },
+    "parameters": {
+      "allowedLocations": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed locations",
+          "description": "The list of allowed Azure regions."
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "not": {
+          "field": "location",
+          "in": "[parameters('allowedLocations')]"
+        }
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}

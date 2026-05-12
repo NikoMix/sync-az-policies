@@ -1,0 +1,74 @@
+name: Sync Azure Policy Definitions
+description: Recursively sync custom Azure Policy definitions at tenant scope from a folder structure.
+author: Nikomix
+
+inputs:
+  root-folder:
+    description: Root folder that contains policy folders.
+    required: true
+  tenant-id:
+    description: Azure tenant ID used for service principal login.
+    required: true
+  client-id:
+    description: Azure service principal app (client) ID.
+    required: true
+  client-secret:
+    description: Azure service principal client secret.
+    required: true
+  policy-name-prefix:
+    description: Optional prefix added to generated policy definition names.
+    required: false
+    default: ""
+  allow-overwrite:
+    description: If false, existing policy definitions are not updated.
+    required: false
+    default: "true"
+  delete-missing-policies:
+    description: If true, delete custom tenant policy definitions that are not present in the repository.
+    required: false
+    default: "false"
+  delete-missing-initiatives:
+    description: If true, delete custom tenant policy set definitions not represented by root-level JSON files.
+    required: false
+    default: "false"
+  dry-run:
+    description: If true, only logs what would be created.
+    required: false
+    default: "false"
+
+outputs:
+  created-count:
+    description: Number of policy definitions created or updated.
+    value: ${{ steps.sync.outputs.created-count }}
+  deleted-count:
+    description: Number of policy definitions deleted because they were missing from the repository.
+    value: ${{ steps.sync.outputs.deleted-count }}
+  warning-count:
+    description: Number of warnings for tenant policy definitions not present in the repository.
+    value: ${{ steps.sync.outputs.warning-count }}
+  initiative-created-count:
+    description: Number of policy initiatives created or updated.
+    value: ${{ steps.sync.outputs.initiative-created-count }}
+  initiative-deleted-count:
+    description: Number of policy initiatives deleted because they were missing from root-level JSON files.
+    value: ${{ steps.sync.outputs.initiative-deleted-count }}
+  initiative-warning-count:
+    description: Number of warnings for tenant policy initiatives not represented by root-level JSON files.
+    value: ${{ steps.sync.outputs.initiative-warning-count }}
+
+runs:
+  using: composite
+  steps:
+    - id: sync
+      shell: bash
+      env:
+        INPUT_ROOT_FOLDER: ${{ inputs.root-folder }}
+        INPUT_TENANT_ID: ${{ inputs.tenant-id }}
+        INPUT_CLIENT_ID: ${{ inputs.client-id }}
+        INPUT_CLIENT_SECRET: ${{ inputs.client-secret }}
+        INPUT_POLICY_NAME_PREFIX: ${{ inputs.policy-name-prefix }}
+        INPUT_ALLOW_OVERWRITE: ${{ inputs.allow-overwrite }}
+        INPUT_DELETE_MISSING_POLICIES: ${{ inputs.delete-missing-policies }}
+        INPUT_DELETE_MISSING_INITIATIVES: ${{ inputs.delete-missing-initiatives }}
+        INPUT_DRY_RUN: ${{ inputs.dry-run }}
+      run: ${{ github.action_path }}/scripts/sync-policies.sh
