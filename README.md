@@ -60,7 +60,7 @@ Important details:
 
 ## Inputs
 
-- `root-folder` (required): relative path to policy root folder.
+- `root` (required): relative path to policy root folder.
 - `tenant-id` (required): Azure tenant ID.
 - `client-id` (required): service principal app/client ID.
 - `client-secret` (required): service principal secret.
@@ -69,6 +69,10 @@ Important details:
 - `delete-missing-policies` (optional, default `false`): if `true`, custom tenant definitions not represented in repo are deleted.
 - `delete-missing-initiatives` (optional, default `false`): if `true`, custom tenant initiatives not represented by root-level JSON files are deleted.
 - `dry-run` (optional, default `false`): logs operations without writing.
+- `log-level` (optional, default `normal`): controls verbosity (`quiet`, `normal`, `verbose`).
+  - `quiet`: only warnings, errors, and final summary.
+  - `normal`: notices, warnings, errors, and final summary.
+  - `verbose`: detailed per-item progress plus normal logs.
 
 ## Output
 
@@ -97,7 +101,7 @@ jobs:
       - name: Sync policies to tenant
         uses: nikomix/sync-az-policies@v1
         with:
-          root-folder: ./policies
+          root: ./policies
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -105,6 +109,7 @@ jobs:
           delete-missing-policies: false
           delete-missing-initiatives: false
           dry-run: false
+          log-level: normal
 ```
 
 ## Required Service Principal Permissions

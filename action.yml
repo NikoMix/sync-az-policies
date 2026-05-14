@@ -3,7 +3,7 @@ description: Recursively sync custom Azure Policy definitions at tenant scope fr
 author: Nikomix
 
 inputs:
-  root-folder:
+  root:
     description: Root folder that contains policy folders.
     required: true
   tenant-id:
@@ -35,6 +35,10 @@ inputs:
     description: If true, only logs what would be created.
     required: false
     default: "false"
+  log-level:
+    description: Logging verbosity. One of quiet, normal, verbose.
+    required: false
+    default: "normal"
 
 outputs:
   created-count:
@@ -62,7 +66,7 @@ runs:
     - id: sync
       shell: bash
       env:
-        INPUT_ROOT_FOLDER: ${{ inputs.root-folder }}
+        INPUT_ROOT: ${{ inputs.root }}
         INPUT_TENANT_ID: ${{ inputs.tenant-id }}
         INPUT_CLIENT_ID: ${{ inputs.client-id }}
         INPUT_CLIENT_SECRET: ${{ inputs.client-secret }}
@@ -71,4 +75,5 @@ runs:
         INPUT_DELETE_MISSING_POLICIES: ${{ inputs.delete-missing-policies }}
         INPUT_DELETE_MISSING_INITIATIVES: ${{ inputs.delete-missing-initiatives }}
         INPUT_DRY_RUN: ${{ inputs.dry-run }}
+        INPUT_LOG_LEVEL: ${{ inputs.log-level }}
       run: ${{ github.action_path }}/scripts/sync-policies.sh
